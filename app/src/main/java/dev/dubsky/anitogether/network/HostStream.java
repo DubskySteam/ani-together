@@ -22,11 +22,15 @@ public class HostStream {
         try {
             initializeServer();
             displayHostInfo();
-
             Thread acceptThread = createClientAcceptThread();
             acceptThread.start();
-
             waitForClients();
+    
+            String streamUrl = getStreamUrl();
+            String subtitleUrl = getSubtitleUrl();
+            broadcastMessage("START:" + streamUrl + ":" + subtitleUrl);
+            StreamUtils.playStream(streamUrl, subtitleUrl);
+    
             handleStreamControlMenu();
         } catch (IOException | URISyntaxException e) {
             System.out.println(Color.RED + "Hosting stream failed: " + e.getMessage() + Color.RESET);
@@ -34,6 +38,13 @@ public class HostStream {
             cleanupResources();
         }
     }
+    
+    private static String getSubtitleUrl() throws IOException {
+        System.out.println(Color.YELLOW + "Enter the URL of the subtitle file: " + Color.RESET);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        return reader.readLine();
+    }
+    
 
     private static void initializeServer() throws IOException {
         serverSocket = new ServerSocket(config.PORT);
@@ -75,10 +86,6 @@ public class HostStream {
         if (clients.isEmpty()) {
             Menu.displayNoClientsMessage();
         }
-
-        String streamUrl = getStreamUrl();
-        broadcastMessage("START:" + streamUrl);
-        StreamUtils.playStream(streamUrl);
     }
 
     private static String getStreamUrl() throws IOException {

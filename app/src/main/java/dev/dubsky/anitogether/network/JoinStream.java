@@ -47,8 +47,11 @@ public class JoinStream {
         try {
             if (message.startsWith("START:")) {
                 String streamUrl = message.substring(6);
+                String[] parts = streamUrl.split(":");
+                streamUrl = parts[0];
+                String subtitleUrl = parts[1];
                 System.out.println(Color.GREEN + "Starting stream: " + streamUrl + Color.RESET);
-                StreamUtils.playStream(streamUrl);
+                StreamUtils.playStream(streamUrl, subtitleUrl);
 
             } else if (message.equals("PAUSE")) {
                 System.out.println(Color.YELLOW + "Stream paused." + Color.RESET);

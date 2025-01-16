@@ -11,14 +11,15 @@ public class StreamUtils {
 
     private static MpvController mpvController = new MpvController();
 
-    public static void playStream(String url) {
+    public static void playStream(String streamUrl, String subtitleUrl) {
         try {
-            Main.mpv.startMpv(url);
+            Main.mpv.startMpv(streamUrl, subtitleUrl);
             Thread.sleep(2000);
         } catch (IOException | InterruptedException e) {
             System.err.println("Error playing stream: " + e.getMessage());
         }
     }
+    
 
     public static void cleanupMpv() {
         try {

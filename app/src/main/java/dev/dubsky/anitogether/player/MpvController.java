@@ -15,12 +15,14 @@ public class MpvController {
         this.ipcPath = isWindows ? "\\\\.\\pipe\\mpv-socket" : "/tmp/mpv-socket";
     }
 
-    public void startMpv(String streamUrl) throws IOException {
-        String command = isWindows ? "cmd /c start mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " " + streamUrl
-                : "mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " " + streamUrl;
+    public void startMpv(String streamUrl, String subtitleUrl) throws IOException {
+        String command = isWindows
+            ? "cmd /c start mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " --sub-file=" + subtitleUrl + " " + streamUrl
+            : "mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " --sub-file=" + subtitleUrl + " " + streamUrl;
+        
         ProcessBuilder processBuilder = new ProcessBuilder(isWindows ? "cmd.exe" : "sh", "-c", command);
         processBuilder.start();
-    }
+    }    
 
     private void sendCommand(String command) throws IOException {
         if (isWindows) {
