@@ -7,22 +7,32 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 public class MpvController {
+    private static MpvController instance;
     private String ipcPath;
     private boolean isWindows;
+    private boolean isPlaying;
 
-    public MpvController() {
+    private MpvController() {
         this.isWindows = System.getProperty("os.name").toLowerCase().contains("win");
-        this.ipcPath = isWindows ? "\\\\.\\pipe\\mpv-socket" : "/tmp/mpv-socket";
+        this.ipcPath = isWindows ? "\\\\.\\pipe\\mpv-anitogether" : "/tmp/mpv-anitogether";
+    }
+
+    public static synchronized MpvController getInstance() {
+        if (instance == null) {
+            instance = new MpvController();
+        }
+        return instance;
     }
 
     public void startMpv(String streamUrl, String subtitleUrl) throws IOException {
         String command = isWindows
             ? "cmd /c start mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " --sub-file=" + subtitleUrl + " " + streamUrl
             : "mpv --quiet --profile=low-latency --cache=no --input-ipc-server=" + ipcPath + " --sub-file=" + subtitleUrl + " " + streamUrl;
-        
+
         ProcessBuilder processBuilder = new ProcessBuilder(isWindows ? "cmd.exe" : "sh", "-c", command);
         processBuilder.start();
-    }    
+        isPlaying = true;
+    }
 
     private void sendCommand(String command) throws IOException {
         if (isWindows) {
@@ -33,7 +43,7 @@ public class MpvController {
             UnixDomainSocketAddress address = UnixDomainSocketAddress.of(ipcPath);
             try (SocketChannel channel = SocketChannel.open(StandardProtocolFamily.UNIX)) {
                 channel.connect(address);
-                channel.write(java.nio.ByteBuffer.wrap((command + "\n").getBytes()));
+                channel.write(ByteBuffer.wrap((command + "\n").getBytes()));
             }
         }
     }
@@ -52,7 +62,7 @@ public class MpvController {
             UnixDomainSocketAddress address = UnixDomainSocketAddress.of(ipcPath);
             try (SocketChannel channel = SocketChannel.open(StandardProtocolFamily.UNIX)) {
                 channel.connect(address);
-                channel.write(java.nio.ByteBuffer.wrap((command + "\n").getBytes()));
+                channel.write(ByteBuffer.wrap((command + "\n").getBytes()));
 
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
                 while (channel.read(buffer) > 0) {
@@ -89,9 +99,7 @@ public class MpvController {
 
     public double getCurrentTimestamp() throws IOException {
         String command = "{ \"command\": [\"get_property\", \"time-pos\"] }";
-        System.out.println("Sending command: " + command);
         String response = sendCommandWithResponse(command);
-        System.out.println(response);
         int dataStart = response.indexOf("\"data\":");
         int dataEnd = response.indexOf(",", dataStart);
         if (dataStart != -1 && dataEnd != -1) {
@@ -101,4 +109,7 @@ public class MpvController {
         throw new IOException("Failed to get current timestamp");
     }
 
+    public boolean isPlaying() {
+        return isPlaying;
+    }
 }
