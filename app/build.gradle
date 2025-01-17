@@ -11,6 +11,11 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava
     implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.10.1'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'org.jline:jline:3.20.0'
+    implementation 'org.fusesource.jansi:jansi:1.18'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
 }
 
 java {
