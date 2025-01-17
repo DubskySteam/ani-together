@@ -40,5 +40,6 @@ More info will be provided as we approach the v1.0 release 🎉.
 
 ## APIs used within the project 🔌
 
+- **Anime API**: Used for searching Animes and fetching the streaming url's. https://github.com/falcon71181/Anime-API
 - **Discord API**: For Discord integration and watch party management 🤖.
 - **AniList API**: For syncing your anime watchlist and progress 📱.
