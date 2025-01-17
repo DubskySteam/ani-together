@@ -13,18 +13,18 @@ import dev.dubsky.anitogether.ui.Menu;
 import dev.dubsky.anitogether.ui.MenuManager;
 import dev.dubsky.anitogether.util.StreamUtils;
 
-public class ClientV2 {
+public class Client {
 
-    private static ClientV2 instance;
+    private static Client instance;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
 
-    private ClientV2() {}
+    private Client() {}
 
-    public static synchronized ClientV2 getInstance() {
+    public static synchronized Client getInstance() {
         if (instance == null) {
-            instance = new ClientV2();
+            instance = new Client();
         }
         return instance;
     }

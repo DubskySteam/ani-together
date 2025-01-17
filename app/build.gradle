@@ -26,9 +26,12 @@ java {
 
 application {
     mainClass = 'dev.dubsky.anitogether.Main'
+    applicationName = 'ani-together'
 }
 
 jar {
+    archiveBaseName.set('ani-together')
+    archiveVersion.set('0.3.0')
     manifest {
         attributes(
             'Main-Class': 'dev.dubsky.anitogether.Main'

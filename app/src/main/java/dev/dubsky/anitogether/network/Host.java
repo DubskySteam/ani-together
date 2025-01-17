@@ -15,18 +15,18 @@ import dev.dubsky.anitogether.ui.Menu;
 import dev.dubsky.anitogether.ui.MenuManager;
 import dev.dubsky.anitogether.util.StreamUtils;
 
-public class HostV2 {
+public class Host {
 
-    private static HostV2 instance;
+    private static Host instance;
     private final Set<Socket> clients = ConcurrentHashMap.newKeySet();
     private ServerSocket serverSocket;
 
-    private HostV2() {
+    private Host() {
     }
 
-    public static synchronized HostV2 getInstance() {
+    public static synchronized Host getInstance() {
         if (instance == null) {
-            instance = new HostV2();
+            instance = new Host();
         }
         return instance;
     }
