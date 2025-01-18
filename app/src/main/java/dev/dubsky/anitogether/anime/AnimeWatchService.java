@@ -16,7 +16,7 @@ public class AnimeWatchService {
             MenuManager postEpisodeMenu = new MenuManager("Anime Control");
             postEpisodeMenu.addOption("1", "Next episode", choice -> {
                 try {
-                    List<String> nextEpisodeData = AnimeService.selectAnimeAndEpisode();
+                    List<String> nextEpisodeData = AnimeService.getNextEpisode();
                     playEpisode(nextEpisodeData);
                 } catch (IOException e) {
                     System.err.println("Error selecting next episode: " + e.getMessage());
