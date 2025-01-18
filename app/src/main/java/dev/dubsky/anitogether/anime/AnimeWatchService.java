@@ -12,34 +12,35 @@ public class AnimeWatchService {
     public static void watchAnime() {
         try {
             List<String> streamData = AnimeService.selectAnimeAndEpisode();
-            StreamUtils.cleanupMpv();
             playEpisode(streamData);
-            
-            while (MpvController.getInstance().isPlaying()) {
-                MenuManager postEpisodeMenu = new MenuManager("Anime Control");
-                postEpisodeMenu.addOption("1", "Next episode", choice -> {
-                    try {
-                        List<String> nextEpisodeData = AnimeService.selectAnimeAndEpisode();
-                        playEpisode(nextEpisodeData);
-                    } catch (IOException e) {
-                        System.err.println("Error selecting next episode: " + e.getMessage());
-                    }
-                });
-                postEpisodeMenu.addOption("2", "Back to main menu", null);
+            MenuManager postEpisodeMenu = new MenuManager("Anime Control");
+            postEpisodeMenu.addOption("1", "Next episode", choice -> {
+                try {
+                    List<String> nextEpisodeData = AnimeService.selectAnimeAndEpisode();
+                    playEpisode(nextEpisodeData);
+                } catch (IOException e) {
+                    System.err.println("Error selecting next episode: " + e.getMessage());
+                }
+            });
+            postEpisodeMenu.addOption("2", "Back to main menu", null);
+
+            while (true) {
+                postEpisodeMenu.display();
                 String choice = postEpisodeMenu.getUserInput();
                 postEpisodeMenu.executeChoice(choice);
                 if (choice.equals("2")) {
                     break;
                 }
             }
+            StreamUtils.cleanupMpv();
         } catch (IOException e) {
             System.err.println("Error watching anime: " + e.getMessage());
         }
     }
 
     public static void playEpisode(List<String> streamData) throws IOException {
-        MpvController mpv = MpvController.getInstance();
-        mpv.startMpv(streamData.get(0), streamData.get(1));
+        StreamUtils.cleanupMpv();
+        MpvController.getInstance().startMpv(streamData.get(0), streamData.get(1));
     }
 
 }
