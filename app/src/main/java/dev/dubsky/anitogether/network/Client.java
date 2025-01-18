@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import dev.dubsky.anitogether.config.Params;
+import dev.dubsky.anitogether.Main;
 import dev.dubsky.anitogether.player.MpvController;
 import dev.dubsky.anitogether.ui.Color;
 import dev.dubsky.anitogether.ui.Menu;
@@ -32,7 +32,7 @@ public class Client {
     public void start() {
         try {
             String HOST_IP = Menu.getHostIp();
-            socket = new Socket(HOST_IP, Params.PORT);
+            socket = new Socket(HOST_IP, Main.configManager.getConfig().getPORT());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 

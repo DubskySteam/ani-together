@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import dev.dubsky.anitogether.Main;
 import dev.dubsky.anitogether.anime.AnimeService;
-import dev.dubsky.anitogether.config.Params;
 import dev.dubsky.anitogether.player.MpvController;
 import dev.dubsky.anitogether.ui.Menu;
 import dev.dubsky.anitogether.ui.MenuManager;
@@ -33,8 +33,8 @@ public class Host {
 
     public void start() {
         try {
-            serverSocket = new ServerSocket(Params.PORT);
-            System.out.println("Server started on port " + Params.PORT);
+            serverSocket = new ServerSocket(Main.configManager.getConfig().getPORT());
+            System.out.println("Server started on port " + Main.configManager.getConfig().getPORT());
 
             new Thread(this::acceptClients).start();
 
