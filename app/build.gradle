@@ -16,6 +16,8 @@ dependencies {
     implementation 'org.jline:jline:3.20.0'
     implementation 'org.fusesource.jansi:jansi:1.18'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+    implementation 'net.java.dev.jna:jna:5.12.1'
+    implementation 'net.java.dev.jna:jna-platform:5.12.1'
 }
 
 java {
