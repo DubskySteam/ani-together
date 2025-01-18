@@ -33,7 +33,7 @@ application {
 
 jar {
     archiveBaseName.set('ani-together')
-    archiveVersion.set('0.4.1')
+    archiveVersion.set('0.4.2')
     manifest {
         attributes(
             'Main-Class': 'dev.dubsky.anitogether.Main'

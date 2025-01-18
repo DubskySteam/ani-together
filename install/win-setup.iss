@@ -1,6 +1,6 @@
 [Setup]
 AppName=Ani Together
-AppVersion=0.4.0
+AppVersion=0.4.2
 DefaultDirName={pf}\AniTogether
 DefaultGroupName=AniTogether
 OutputDir=dist

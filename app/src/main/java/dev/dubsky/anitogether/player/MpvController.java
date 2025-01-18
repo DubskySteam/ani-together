@@ -87,7 +87,7 @@ public class MpvController {
         sendCommand("{ \"command\": [\"set_property\", \"pause\", false] }");
     }
 
-    public void seekTo(int seconds) throws IOException {
+    public void seekTo(double seconds) throws IOException {
         sendCommand("{ \"command\": [\"seek\", " + seconds + ", \"absolute\"] }");
     }
 
