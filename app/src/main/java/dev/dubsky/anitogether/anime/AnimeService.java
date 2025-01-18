@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import dev.dubsky.anitogether.ui.ArrowKeySelector;
+import dev.dubsky.anitogether.ui.Menu;
 
 public class AnimeService {
     private static final AnimeFetcher apiClient = new AnimeFetcher();
@@ -19,6 +20,7 @@ public class AnimeService {
                 .map(anime -> anime.name)
                 .collect(Collectors.toList());
 
+        Menu.clearMenu();
         String selectedAnime = ArrowKeySelector.select(animeNames, "Select an anime:");
         String animeId = searchResult.data.animes.get(animeNames.indexOf(selectedAnime)).id;
 
@@ -27,6 +29,7 @@ public class AnimeService {
                 .map(episode -> "Episode " + episode.number + ": " + episode.title)
                 .collect(Collectors.toList());
 
+        Menu.clearMenu();
         String selectedEpisode = ArrowKeySelector.select(episodeNames, "Select an episode:");
         String episodeId = episodeList.data.episodes.get(episodeNames.indexOf(selectedEpisode)).episodeId;
 
