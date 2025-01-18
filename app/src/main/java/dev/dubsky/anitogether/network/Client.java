@@ -66,8 +66,6 @@ public class Client {
         try {
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println("Received: " + message);
-
                 if (message.equals("QUIT")) {
                     System.out.println(Color.RED + "Stream ended. Exiting..." + Color.RESET);
                     StreamUtils.cleanup();
@@ -90,7 +88,6 @@ public class Client {
                 if (parts.length == 2) {
                     String streamUrl = parts[0];
                     String subtitleUrl = parts[1];
-                    System.out.println(Color.GREEN + "Starting stream: " + streamUrl + Color.RESET);
                     MpvController.getInstance().startMpv(streamUrl, subtitleUrl);
                 } else {
                     System.err.println("Invalid START message format: " + message);
@@ -114,7 +111,6 @@ public class Client {
                 if (parts.length == 2) {
                     String streamUrl = parts[0];
                     String subtitleUrl = parts[1];
-                    System.out.println(Color.GREEN + "Starting stream: " + streamUrl + Color.RESET);
                     MpvController.getInstance().startMpv(streamUrl, subtitleUrl);
                 } else {
                     System.err.println("Invalid START message format: " + message);

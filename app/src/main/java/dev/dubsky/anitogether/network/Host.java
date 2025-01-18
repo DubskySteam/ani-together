@@ -42,9 +42,6 @@ public class Host {
             Menu.displayWaitingForClients();
 
             List<String> streamData = AnimeService.selectAnimeAndEpisode();
-            /**List<String> streamData = List.of(
-                    "https://tt57.biananset.net/_v7/63eaec38cc24343592acf4e001c367ebf1dea16ccd06ee984fac77f75e9db0dd2548da1a386db5959879b83dea1df3df5c0005ecf7226720883fdbf99937a42a9bd7c3f02b1cf8d0cd6767f21558b25004f074d83ac29f2ae6f7f8957db1abf0515d2064779cc7198e6903eff6bc07450c6610e20f2bcbbd0778223761912fd1/master.m3u8",
-                    "https://ccb.megafiles.store/2b/c3/2bc3ead7683ccd82511ad70826d531a0/eng-2.vtt");*/
 
             broadcastMessage("START|" + streamData.get(0) + "|" + streamData.get(1));
             MpvController.getInstance().startMpv(streamData.get(0), streamData.get(1));
