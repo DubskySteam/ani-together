@@ -5,14 +5,16 @@ import java.util.List;
 
 import dev.dubsky.anitogether.player.MpvController;
 import dev.dubsky.anitogether.ui.MenuManager;
+import dev.dubsky.anitogether.util.StreamUtils;
 
 public class AnimeWatchService {
 
     public static void watchAnime() {
         try {
             List<String> streamData = AnimeService.selectAnimeAndEpisode();
-            
+            StreamUtils.cleanupMpv();
             playEpisode(streamData);
+            
             while (MpvController.getInstance().isPlaying()) {
                 MenuManager postEpisodeMenu = new MenuManager("Anime Control");
                 postEpisodeMenu.addOption("1", "Next episode", choice -> {

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import dev.dubsky.anitogether.config.Params;
+import dev.dubsky.anitogether.Main;
 import dev.dubsky.anitogether.player.MpvController;
 import dev.dubsky.anitogether.ui.Color;
 import dev.dubsky.anitogether.ui.Menu;
@@ -32,7 +32,7 @@ public class Client {
     public void start() {
         try {
             String HOST_IP = Menu.getHostIp();
-            socket = new Socket(HOST_IP, Params.PORT);
+            socket = new Socket(HOST_IP, Main.configManager.getConfig().getPORT());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -66,8 +66,6 @@ public class Client {
         try {
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println("Received: " + message);
-
                 if (message.equals("QUIT")) {
                     System.out.println(Color.RED + "Stream ended. Exiting..." + Color.RESET);
                     StreamUtils.cleanup();
@@ -90,7 +88,6 @@ public class Client {
                 if (parts.length == 2) {
                     String streamUrl = parts[0];
                     String subtitleUrl = parts[1];
-                    System.out.println(Color.GREEN + "Starting stream: " + streamUrl + Color.RESET);
                     MpvController.getInstance().startMpv(streamUrl, subtitleUrl);
                 } else {
                     System.err.println("Invalid START message format: " + message);
@@ -114,7 +111,6 @@ public class Client {
                 if (parts.length == 2) {
                     String streamUrl = parts[0];
                     String subtitleUrl = parts[1];
-                    System.out.println(Color.GREEN + "Starting stream: " + streamUrl + Color.RESET);
                     MpvController.getInstance().startMpv(streamUrl, subtitleUrl);
                 } else {
                     System.err.println("Invalid START message format: " + message);

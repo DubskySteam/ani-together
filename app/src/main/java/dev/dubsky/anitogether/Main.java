@@ -37,7 +37,7 @@ public class Main {
         mainMenu.addOption("5", "Exit", choice -> exit());
 
         while (true) {
-            // Menu.clearMenu();
+            Menu.clearMenu();
             mainMenu.display();
             String choice = mainMenu.getUserInput();
             mainMenu.executeChoice(choice);

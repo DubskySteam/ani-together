@@ -3,8 +3,8 @@ package dev.dubsky.anitogether.anime;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import dev.dubsky.anitogether.ui.ArrowKeySelector;
+import dev.dubsky.anitogether.ui.Menu;
 
 public class AnimeService {
     private static final AnimeFetcher apiClient = new AnimeFetcher();
@@ -16,24 +16,26 @@ public class AnimeService {
         String animeName = System.console().readLine();
 
         AnimeFetcher.SearchResult searchResult = apiClient.searchAnime(animeName, 1);
-        List<String> animeNames = searchResult.animes.stream()
+        List<String> animeNames = searchResult.data.animes.stream()
                 .map(anime -> anime.name)
                 .collect(Collectors.toList());
 
+        Menu.clearMenu();
         String selectedAnime = ArrowKeySelector.select(animeNames, "Select an anime:");
-        String animeId = searchResult.animes.get(animeNames.indexOf(selectedAnime)).id;
+        String animeId = searchResult.data.animes.get(animeNames.indexOf(selectedAnime)).id;
 
         AnimeFetcher.EpisodeList episodeList = apiClient.getEpisodeList(animeId);
-        List<String> episodeNames = episodeList.episodes.stream()
-                .map(episode -> "Episode " + episode.episodeNo + ": " + episode.name)
+        List<String> episodeNames = episodeList.data.episodes.stream()
+                .map(episode -> "Episode " + episode.number + ": " + episode.title)
                 .collect(Collectors.toList());
 
+        Menu.clearMenu();
         String selectedEpisode = ArrowKeySelector.select(episodeNames, "Select an episode:");
-        String episodeId = episodeList.episodes.get(episodeNames.indexOf(selectedEpisode)).episodeId;
+        String episodeId = episodeList.data.episodes.get(episodeNames.indexOf(selectedEpisode)).episodeId;
 
         AnimeFetcher.StreamInfo streamInfo = apiClient.getStreamInfo(episodeId);
-        String streamUrl = streamInfo.sources.get(0).url;
-        String subtitleUrl = streamInfo.tracks.stream()
+        String streamUrl = streamInfo.data.sources.get(0).url;
+        String subtitleUrl = streamInfo.data.tracks.stream()
                 .filter(track -> "captions".equals(track.kind) && "English".equals(track.label))
                 .findFirst()
                 .map(track -> track.file)
@@ -41,25 +43,25 @@ public class AnimeService {
 
         lastWatchedAnimeId = animeId;
         lastWatchedEpisodeIndex = episodeNames.indexOf(selectedEpisode);
+
         return List.of(streamUrl, subtitleUrl);
     }
-    
+
     public static List<String> getNextEpisode() throws IOException {
         if (lastWatchedAnimeId == null) {
             throw new IllegalStateException("No previously watched anime");
         }
 
         AnimeFetcher.EpisodeList episodeList = apiClient.getEpisodeList(lastWatchedAnimeId);
-        if (lastWatchedEpisodeIndex + 1 >= episodeList.episodes.size()) {
+        if (lastWatchedEpisodeIndex + 1 >= episodeList.data.totalEpisodes) {
             return null; // No next episode available
         }
 
         lastWatchedEpisodeIndex++;
-        AnimeFetcher.Episode nextEpisode = episodeList.episodes.get(lastWatchedEpisodeIndex);
+        AnimeFetcher.Episode nextEpisode = episodeList.data.episodes.get(lastWatchedEpisodeIndex);
         AnimeFetcher.StreamInfo streamInfo = apiClient.getStreamInfo(nextEpisode.episodeId);
-
-        String streamUrl = streamInfo.sources.get(0).url;
-        String subtitleUrl = streamInfo.tracks.stream()
+        String streamUrl = streamInfo.data.sources.get(0).url;
+        String subtitleUrl = streamInfo.data.tracks.stream()
                 .filter(track -> "captions".equals(track.kind) && "English".equals(track.label))
                 .findFirst()
                 .map(track -> track.file)
@@ -73,6 +75,6 @@ public class AnimeService {
             return false;
         }
         AnimeFetcher.EpisodeList episodeList = apiClient.getEpisodeList(lastWatchedAnimeId);
-        return lastWatchedEpisodeIndex + 1 < episodeList.episodes.size();
+        return lastWatchedEpisodeIndex + 1 < episodeList.data.totalEpisodes;
     }
 }

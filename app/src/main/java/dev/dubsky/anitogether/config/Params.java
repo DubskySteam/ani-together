@@ -8,12 +8,12 @@ public class Params {
     /**
      * The port number to use for the server.
      */
-    public static int PORT = 27015;
+    public static int BASE_PORT = 27015;
 
     /**
      * The base URL for the API, used to fetch Anime info and episode URLs.
      */
-    public static String BASE_API_URL = "https://api-anime-rouge.vercel.app";
+    public static String BASE_API_URL = "https://anime-api-git-main-dubskys-projects.vercel.app";
 
     /**
      * The path to the configuration file.

@@ -25,7 +25,7 @@ public class ConfigManager {
             config = objectMapper.readValue(configFile, ConfigData.class);
         } else {
             config.setAUTOPLAY(false);
-            config.setPORT(27015);
+            config.setPORT(Params.BASE_PORT);
             saveConfig();
         }
     }
